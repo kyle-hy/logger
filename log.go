@@ -15,7 +15,23 @@ var (
 	basicLogger = log.New()
 )
 
-type Logger log.Entry
+// Colors
+const (
+	Reset       = "\033[0m"
+	Red         = "\033[31m"
+	Green       = "\033[32m"
+	Yellow      = "\033[33m"
+	Blue        = "\033[34m"
+	Magenta     = "\033[35m"
+	Cyan        = "\033[36m"
+	White       = "\033[37m"
+	BlueBold    = "\033[34;1m"
+	MagentaBold = "\033[35;1m"
+	RedBold     = "\033[31;1m"
+	YellowBold  = "\033[33;1m"
+)
+
+// type Logger log.Entry
 
 func init() {
 	//formatter := &log.TextFormatter{DisableColors:true, FullTimestamp:true, TimestampFormat:"01-02 15:04:05.000"}
@@ -76,11 +92,15 @@ func GetLogger() *log.Entry {
 }
 
 func Debug(v ...interface{}) {
-	GetLogger().Debug(fmt.Sprint(v...))
+	GetLogger().Debug(v...)
 }
 
 func Debugf(format string, v ...interface{}) {
 	GetLogger().Debugf(format, v...)
+}
+
+func Debugln(v ...interface{}) {
+	GetLogger().Debugln(v...)
 }
 
 func Info(v ...interface{}) {
@@ -91,12 +111,20 @@ func Infof(format string, v ...interface{}) {
 	GetLogger().Infof(format, v...)
 }
 
+func Infoln(v ...interface{}) {
+	GetLogger().Infoln(v...)
+}
+
 func Warn(v ...interface{}) {
 	GetLogger().Warn(v...)
 }
 
 func Warnf(format string, v ...interface{}) {
 	GetLogger().Warnf(format, v...)
+}
+
+func Warnln(v ...interface{}) {
+	GetLogger().Warnln(v...)
 }
 
 func Error(v ...interface{}) {
@@ -107,6 +135,10 @@ func Errorf(format string, v ...interface{}) {
 	GetLogger().Errorf(format, v...)
 }
 
+func Errorln(v ...interface{}) {
+	GetLogger().Errorln(v...)
+}
+
 func Fatal(v ...interface{}) {
 	GetLogger().Fatal(v...)
 }
@@ -115,12 +147,20 @@ func Fatalf(format string, v ...interface{}) {
 	GetLogger().Fatalf(format, v...)
 }
 
+func Fatalln(v ...interface{}) {
+	GetLogger().Fatalln(v...)
+}
+
 func Panic(v ...interface{}) {
 	GetLogger().Panic(v...)
 }
 
 func Panicf(format string, v ...interface{}) {
 	GetLogger().Panicf(format, v...)
+}
+
+func Panicln(v ...interface{}) {
+	GetLogger().Panicln(v...)
 }
 
 func WithSrc(entry *log.Entry) *log.Entry {
@@ -203,15 +243,15 @@ func printLogLevel(level log.Level) string {
 	case log.DebugLevel:
 		return "DEBUG"
 	case log.InfoLevel:
-		return "INFO "
+		return Reset + Green + "INFO" + Reset
 	case log.WarnLevel:
-		return "WARN "
+		return Reset + Yellow + "WARN" + Reset
 	case log.ErrorLevel:
-		return "ERROR"
+		return Reset + Red + "ERROR" + Reset
 	case log.FatalLevel:
-		return "FATAL"
+		return Reset + Red + "FATAL" + Reset
 	case log.PanicLevel:
-		return "PANIC"
+		return Reset + Red + "PANIC" + Reset
 	}
 
 	return "unknown"
@@ -263,7 +303,6 @@ func (f *MyFomatter) appendValue(b *bytes.Buffer, value interface{}) {
 }
 
 func (f *MyFomatter) appendKeyValue(b *bytes.Buffer, key string, value interface{}) {
-
 	b.WriteString(key)
 	b.WriteByte('=')
 
@@ -286,4 +325,9 @@ func (f *MyFomatter) appendKeyValue(b *bytes.Buffer, key string, value interface
 	}
 
 	b.WriteByte(' ')
+}
+
+// SetLogLevel ..
+func SetLogLevel(level log.Level) {
+	basicLogger.Level = level
 }
