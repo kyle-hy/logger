@@ -91,6 +91,18 @@ func GetLogger() *log.Entry {
 	return basicLogger.WithField("__src", fmt.Sprintf("[%s:%d %s]", fileName, line, funcName))
 }
 
+func Trace(v ...interface{}) {
+	GetLogger().Trace(v...)
+}
+
+func Tracef(format string, v ...interface{}) {
+	GetLogger().Tracef(format, v...)
+}
+
+func Traceln(v ...interface{}) {
+	GetLogger().Traceln(v...)
+}
+
 func Debug(v ...interface{}) {
 	GetLogger().Debug(v...)
 }
@@ -161,6 +173,20 @@ func Panicf(format string, v ...interface{}) {
 
 func Panicln(v ...interface{}) {
 	GetLogger().Panicln(v...)
+}
+
+func WithError(err error) *log.Entry {
+	return GetLogger().WithError(err)
+}
+
+func WithField(key string, value interface{}) *log.Entry {
+	return GetLogger().WithField(key, value)
+}
+
+type Fields map[string]interface{}
+
+func WithFields(fields Fields) *log.Entry {
+	return GetLogger().WithFields(log.Fields(fields))
 }
 
 func WithSrc(entry *log.Entry) *log.Entry {
@@ -243,7 +269,8 @@ func printLogLevel(level log.Level) string {
 	case log.DebugLevel:
 		return "DEBUG"
 	case log.InfoLevel:
-		return Reset + Green + "INFO" + Reset
+		// return Reset + Green + "INFO" + Reset
+		return "INFO"
 	case log.WarnLevel:
 		return Reset + Yellow + "WARN" + Reset
 	case log.ErrorLevel:
